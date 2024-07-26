@@ -1,0 +1,99 @@
+.container {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  flex-direction: row;
+  margin: 40px 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-left: 1px solid #333;
+
+  .formType {
+    flex: 0 0 25%;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+    overflow-y: scroll;
+    border-right: 1px solid #333;
+
+    .formInputType {
+      height: fit-content;
+      width: 100%;
+      padding: 30px;
+      text-align: center;
+      border-top: 1px dotted #333;
+      cursor: pointer;
+    }
+  }
+  .canvas {
+    flex: 0 0 55%;
+    background-color: rgb(252, 248, 242);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .formCanvas {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    .button {
+      width: 100%;
+      margin: 20px;
+      text-align: end;
+      height: 10%;
+
+      button {
+        margin: 20px;
+        max-height: 40px;
+        width: fit-content;
+      }
+    }
+
+    .formFieldWrapper {
+      height: fit-content;
+      width: fit-content;
+      border: 1px solid #333;
+      padding: 16px 40px;
+      margin-top: 40px;
+      border-radius: 8px;
+      background-color: #333;
+      color: #fff;
+    }
+
+    .formField {
+      text-align: center;
+      margin: auto 0;
+    }
+  }
+  .formValues {
+    flex: 0 0 20%;
+    border: 1px solid #333;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  input {
+    margin-bottom: 30px;
+  }
+
+  .modalButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+}
