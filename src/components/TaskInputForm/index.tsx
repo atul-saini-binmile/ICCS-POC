@@ -38,7 +38,6 @@ const TaskInputForm = (props: any) => {
         assignee: data?.assignee ?? null,
         taskStatus: data?.taskStatus ?? null,
         approval: !!data?.approval,
-        parent: null,
       },
     ];
     setTasks(newTasks);

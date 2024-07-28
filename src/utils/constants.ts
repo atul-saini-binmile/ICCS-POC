@@ -96,10 +96,28 @@ export const logicOptions = [
     value: "parrallel",
     label: "Parrallel",
   },
+];
+
+export const logicColOptions = [
+  {
+    id: 1,
+    value: "1",
+    label: "1",
+  },
   {
     id: 2,
-    value: "if-else",
-    label: "If Else",
+    value: "2",
+    label: "2",
+  },
+  {
+    id: 3,
+    value: "3",
+    label: "3",
+  },
+  {
+    id: 4,
+    value: "4",
+    label: "4",
   },
 ];
 
@@ -145,6 +163,8 @@ export const dummyTasks = [
     approval: true,
   },
 ];
+
+export const nullTask = { isTask: false, parent: null };
 
 export const dummyFlow = [
   [{ id: 1, taskName: "Task A", parent: null }],
