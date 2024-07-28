@@ -4,7 +4,7 @@ import TaskInputForm from "../TaskInputForm";
 import styles from "./index.module.scss";
 
 const TaskSelector = (props: any) => {
-  const { tasks, setTasks, currParent } = props;
+  const { tasks, setTasks, currParent, handleTaskAddToFlow } = props;
   const [show, setShow] = useState(false);
   return (
     <div className={styles.container}>
@@ -14,7 +14,11 @@ const TaskSelector = (props: any) => {
       </div>
       <div className={styles.wrapper}>
         {tasks.map((task: any) => (
-          <div className={styles.taskWrapper} key={task?.id}>
+          <div
+            className={styles.taskWrapper}
+            key={task?.id}
+            onClick={() => handleTaskAddToFlow(currParent, task)}
+          >
             {task?.taskName}
           </div>
         ))}
@@ -29,7 +33,6 @@ const TaskSelector = (props: any) => {
             <TaskInputForm
               tasks={tasks}
               setTasks={setTasks}
-              currParent={currParent}
               setShow={setShow}
             />
           </div>

@@ -9,7 +9,6 @@ import { CustomButton } from "../BaseInputs";
 import CustomModal from "../CustomModal";
 import LogicFormInput from "../LogicFormInput";
 import TaskSelector from "../TaskSelector";
-import { dummyFlow } from "../../utils/constants";
 
 const getTaskWidths = (tasks: any) => {
   const widths: any = {};
@@ -34,7 +33,6 @@ const getTaskWidths = (tasks: any) => {
       }
     });
   });
-  console.log(widths);
   return widths;
 };
 
@@ -47,23 +45,25 @@ const TaskBuilderContainer = () => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [currParent, setCurrParent] = useState<number | null>(null);
   const [widths, setWidths] = useState<any>(null);
+  const [selectedTask, setSelectedTask] = useState<any>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setWidths(getTaskWidths(dummyFlow));
-    setFlow(dummyFlow);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dummyFlow]);
 
   const getStoredTasks = async () => {
     const storedTasks: any[] =
       (await localforage.getItem(StorageKeys.TASKS)) ?? [];
+    const storedFlow: any[] =
+      (await localforage.getItem(StorageKeys.FLOWS)) ?? [];
     setTasks(storedTasks);
+    setFlow(storedFlow);
   };
 
   useEffect(() => {
     getStoredTasks();
   }, []);
+
+  useEffect(() => {
+    setWidths(getTaskWidths(flow));
+  }, [flow]);
 
   const getSelectedForm = async () => {
     const form: IFormBuildStorageItem | null =
@@ -80,9 +80,49 @@ const TaskBuilderContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleAddClick = (id: number) => {
+  const handleAddClick = (id: number | null) => {
     setCurrParent(id);
     setShow(true);
+  };
+
+  const handleTaskAddToFlow = (parentId: number | null, task: any) => {
+    if (parentId === null) {
+      const newFlow = [[{ ...task, parent: parentId, children: [] }]];
+      setFlow(newFlow);
+    } else {
+      let pIndex: number = 0;
+      flow?.forEach((level: any[], levelIndex: number) => {
+        level?.forEach((parentTask) => {
+          if (parentTask?.id === parentId) {
+            pIndex = levelIndex;
+          }
+        });
+      });
+      let newFlow = [...flow];
+      if (newFlow[pIndex + 1]?.length > 0) {
+        newFlow[pIndex + 1] = [
+          ...newFlow[pIndex + 1],
+          {
+            ...task,
+            parent: [parentId],
+            children: [],
+          },
+        ];
+      } else {
+        newFlow[pIndex + 1] = [{ ...task, parent: [parentId], children: [] }];
+      }
+      const parentIdx = newFlow[pIndex]?.findIndex(
+        (i: any) => i?.id === parentId
+      );
+      newFlow[pIndex][parentIdx]?.children?.push(task?.id);
+      setFlow(newFlow);
+    }
+    setAddType("");
+  };
+
+  const handleFlowSelectedTask = (task: any) => {
+    setSelectedTask(task);
+    console.log(task);
   };
 
   return (
@@ -92,34 +132,48 @@ const TaskBuilderContainer = () => {
           <div className={styles.selectedForm}>{selectedForm?.title}</div>
           <div className={styles.layoutContainer}>
             <div className={styles.taskFlowContainer}>
-              {flow?.map((level: any[], levelIndex: number) => {
-                return (
-                  <div key={levelIndex} className={styles.taskContainer}>
-                    {level?.map((task) => {
-                      return (
-                        <div
-                          key={task?.id}
-                          id={`level-task-${task?.id}`}
-                          className={styles.task}
-                          style={{
-                            width: `${widths?.[task?.id]?.width}%`,
-                          }}
-                        >
-                          <p className={styles.taskItem}>{task?.taskName}</p>
+              {flow?.length > 0 ? (
+                flow?.map((level: any[], levelIndex: number) => {
+                  return (
+                    <div key={levelIndex} className={styles.taskContainer}>
+                      {level?.map((task, taskIndex) => {
+                        return (
                           <div
-                            className={`${styles.addToForm} ${
-                              addType ? styles.disabled : ""
-                            }`}
-                            onClick={() => handleAddClick(task?.id)}
+                            key={taskIndex}
+                            id={`level-task-${task?.id}`}
+                            className={styles.task}
+                            style={{
+                              width: `${widths?.[task?.id]?.width}%`,
+                            }}
                           >
-                            <span className={styles.add}>+</span>
+                            <p
+                              className={styles.taskItem}
+                              onClick={() => handleFlowSelectedTask(task)}
+                            >
+                              {task?.taskName}
+                            </p>
+                            {task?.children?.length === 0 && (
+                              <div
+                                className={styles.addToForm}
+                                onClick={() => handleAddClick(task?.id)}
+                              >
+                                <span className={styles.add}>+</span>
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                        );
+                      })}
+                    </div>
+                  );
+                })
+              ) : (
+                <div
+                  className={styles.addToForm}
+                  onClick={() => handleAddClick(null)}
+                >
+                  <span className={styles.add}>+</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -131,7 +185,16 @@ const TaskBuilderContainer = () => {
               tasks={tasks}
               setTasks={setTasks}
               currParent={currParent}
+              handleTaskAddToFlow={handleTaskAddToFlow}
             />
+          ) : selectedTask ? (
+            <>
+              {Object?.keys(selectedTask)?.map((item) => (
+                <div>
+                  {item} : {`${selectedTask[item]}`}
+                </div>
+              ))}
+            </>
           ) : (
             <></>
           )}

@@ -24,6 +24,11 @@
       border: 1px solid #333;
       cursor: pointer;
       border-radius: 8px;
+
+      &:hover {
+        border-color: #150df7;
+        color: #150df7;
+      }
     }
   }
 }

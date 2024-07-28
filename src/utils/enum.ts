@@ -29,6 +29,7 @@ export enum StorageKeys {
   FORMS = "forms",
   SELECTED_FORM = "selectedForm",
   TASKS = "tasks",
+  FLOWS = "flow",
 }
 
 export enum FlowFieldType {

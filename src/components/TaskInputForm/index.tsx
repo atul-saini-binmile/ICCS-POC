@@ -17,7 +17,7 @@ import localforage from "localforage";
 import { StorageKeys } from "../../utils/enum";
 
 const TaskInputForm = (props: any) => {
-  const { tasks, setTasks, currParent, setShow } = props;
+  const { tasks, setTasks, setShow } = props;
   const {
     control,
     handleSubmit,
@@ -38,7 +38,7 @@ const TaskInputForm = (props: any) => {
         assignee: data?.assignee ?? null,
         taskStatus: data?.taskStatus ?? null,
         approval: !!data?.approval,
-        parent: [currParent],
+        parent: null,
       },
     ];
     setTasks(newTasks);
