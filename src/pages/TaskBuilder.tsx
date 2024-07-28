@@ -1,11 +1,7 @@
 import { TaskBuilderContainer } from "../components";
 
 const TaskBuilder = () => {
-  return (
-    <div>
-      <TaskBuilderContainer />
-    </div>
-  );
+  return <TaskBuilderContainer />;
 };
 
 export default TaskBuilder;

@@ -1,3 +1,5 @@
+import { TaskStatus } from "./enum";
+
 export const countryCodes = [
   {
     countryName: "United States",
@@ -59,4 +61,115 @@ export const countryCodes = [
     countryMobileExtension: "+55",
     lengthOfMobileNumber: 11,
   },
+];
+
+export const departmentOptions = [
+  { id: 1, value: "hr", label: "HR" },
+  { id: 2, value: "finance", label: "Finance" },
+  { id: 3, value: "admin", label: "Admin" },
+  { id: 4, value: "training", label: "Training" },
+  { id: 5, value: "operations", label: "Operations" },
+  { id: 6, value: "mis", label: "MIS" },
+  { id: 7, value: "work-force-management", label: "Work force management" },
+];
+
+export const taskStatusOptions = [
+  { id: 1, value: TaskStatus.COMPLETED, label: TaskStatus.COMPLETED_VAL },
+  { id: 2, value: TaskStatus.IN_PROGRESS, label: TaskStatus.IN_PROGRESS_VAL },
+  { id: 3, value: TaskStatus.REJECTED, label: TaskStatus.REJECTED_VAL },
+  { id: 4, value: TaskStatus.STALE, label: TaskStatus.STALE_VAL },
+];
+
+export const assigneeOptions = [
+  { id: 1, value: "hr", label: "HR" },
+  { id: 2, value: "finance", label: "Finance" },
+  { id: 3, value: "admin", label: "Admin" },
+  { id: 4, value: "training", label: "Training" },
+  { id: 5, value: "operations", label: "Operations" },
+  { id: 6, value: "mis", label: "MIS" },
+  { id: 7, value: "work-force-management", label: "Work force management" },
+];
+
+export const logicOptions = [
+  {
+    id: 1,
+    value: "parrallel",
+    label: "Parrallel",
+  },
+  {
+    id: 2,
+    value: "if-else",
+    label: "If Else",
+  },
+];
+
+export const dummyTasks = [
+  {
+    id: 1,
+    taskName: "Task A",
+    description: "Do This",
+    timeline: "24",
+    department: "HR",
+    assignee: "",
+    status: "",
+    approval: true,
+  },
+  {
+    id: 1,
+    taskName: "Task B",
+    description: "Do This",
+    timeline: "24",
+    department: "HR",
+    assignee: "",
+    status: "",
+    approval: true,
+  },
+  {
+    id: 1,
+    taskName: "Task C",
+    description: "Do This",
+    timeline: "24",
+    department: "HR",
+    assignee: "",
+    status: "",
+    approval: true,
+  },
+  {
+    id: 1,
+    taskName: "Task D",
+    description: "Do This",
+    timeline: "24",
+    department: "HR",
+    assignee: "",
+    status: "",
+    approval: true,
+  },
+];
+
+export const dummyFlow = [
+  [{ id: 1, taskName: "Task A", parent: null }],
+  [
+    {
+      id: 2,
+      taskName: "Task B",
+      parent: [1],
+    },
+    {
+      id: 3,
+      taskName: "Task C",
+      parent: [1],
+    },
+    {
+      id: 4,
+      taskName: "Task D",
+      parent: [1],
+    },
+  ],
+  [
+    {
+      id: 5,
+      taskName: "Task E",
+      parent: [2],
+    },
+  ],
 ];

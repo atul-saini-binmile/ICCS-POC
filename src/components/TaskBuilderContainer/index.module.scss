@@ -1,0 +1,106 @@
+.container {
+  margin: 40px 0;
+  min-height: 100%;
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+
+  .canvas {
+    width: 70%;
+    min-height: 100%;
+    border-right: 1px solid #333;
+    background-color: rgb(252, 248, 242);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .selectedForm {
+      padding: 16px 24px;
+      background-color: #333;
+      color: #fff;
+      border-radius: 8px;
+    }
+
+    .layoutContainer {
+      margin-top: 40px;
+      width: 100%;
+      text-align: center;
+
+      .taskFlowContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .taskContainer {
+          display: flex;
+          width: 100%;
+
+          .task {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 40px;
+
+            .taskItem {
+              padding: 10px 20px;
+              border: 1px solid #333;
+            }
+          }
+        }
+      }
+    }
+
+    .addToForm {
+      max-width: fit-content;
+      margin: 0 auto;
+      margin-top: 50px;
+      padding: 4px 10px;
+      border: 1px solid #150df7;
+      border-radius: 999px;
+      cursor: pointer;
+
+      .add {
+        color: #150df7;
+      }
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .taskInputs {
+    height: 100%;
+    width: 30%;
+    padding: 20px;
+  }
+}
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  .modalButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+
+    button {
+      background-color: #fff;
+      color: #150df7;
+      width: 100%;
+      height: 50px;
+    }
+  }
+}

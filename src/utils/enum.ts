@@ -28,4 +28,21 @@ export enum FormType {
 export enum StorageKeys {
   FORMS = "forms",
   SELECTED_FORM = "selectedForm",
+  TASKS = "tasks",
+}
+
+export enum FlowFieldType {
+  TASK = "Task",
+  LOGIC = "Logic",
+}
+
+export enum TaskStatus {
+  COMPLETED = "completed",
+  REJECTED = "rejected",
+  IN_PROGRESS = "in-progress",
+  STALE = "stale",
+  COMPLETED_VAL = "Completed",
+  REJECTED_VAL = "Rejected",
+  IN_PROGRESS_VAL = "In Progress",
+  STALE_VAL = "Stale",
 }
