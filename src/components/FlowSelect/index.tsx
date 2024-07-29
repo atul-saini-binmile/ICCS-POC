@@ -25,6 +25,7 @@ const FlowSelect = () => {
 
   useEffect(() => {
     getFormsFromStorage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleProceed = async () => {

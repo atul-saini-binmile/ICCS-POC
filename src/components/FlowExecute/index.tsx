@@ -29,8 +29,10 @@ const FlowExecute = () => {
   };
 
   const handleOngoingFlowSave = async () => {
-    console.log(flow);
-    await localforage.setItem(StorageKeys.ONGOING_FLOW, flow);
+    const ongoingFlow: any[] =
+      (await localforage.getItem(StorageKeys.ONGOING_FLOW)) ?? [];
+    ongoingFlow?.length < flow?.length &&
+      (await localforage.setItem(StorageKeys.ONGOING_FLOW, flow));
   };
 
   useEffect(() => {
@@ -74,6 +76,9 @@ const FlowExecute = () => {
 
     if (childrenIds?.length === 0) {
       newFlow?.push([{ ...nullTask, isEnd: true, parent: [data?.id] }]);
+      setTimeout(() => {
+        window.alert("Flow Completed!");
+      }, 1000);
     } else {
       selectedFlow?.flow?.forEach((level: any) => {
         level?.forEach((task: any) => {
@@ -85,15 +90,19 @@ const FlowExecute = () => {
       if (data?.approval) {
         if (data?.isApproved) {
           const nextTask = children?.find((i) => i?.id === childrenIds[0]);
-          console.log("next", nextTask);
           newFlow?.push([nextTask]);
         } else {
           newFlow?.push([{ ...nullTask, isEnd: true, parent: [data?.id] }]);
+          setTimeout(() => {
+            window.alert("Flow Completed!");
+          }, 1000);
         }
       } else {
         const nextTask = children?.find((i) => i?.id === childrenIds[0]);
-        console.log("next22", nextTask);
         newFlow?.push([nextTask]);
+        setTimeout(() => {
+          window.alert("Flow Completed!");
+        }, 1000);
       }
     }
     setFlow(newFlow);
@@ -128,23 +137,24 @@ const FlowExecute = () => {
                             }}
                           >
                             {task?.isTask ? (
-                              <div>
-                                <p
-                                  className={`${styles.taskItem} ${
-                                    selectedTask?.id === task?.id
-                                      ? styles.active
-                                      : null
-                                  }`}
-                                  onClick={() => {
-                                    setSelectedTask(task);
-                                  }}
-                                >
-                                  {task?.taskName}
-                                </p>
-                                {task?.taskStatus && (
-                                  <span>{task?.taskStatus?.[0]?.label}</span>
-                                )}
-                              </div>
+                              <p
+                                className={`${styles.taskItem} ${
+                                  selectedTask?.id === task?.id
+                                    ? styles.active
+                                    : null
+                                }
+                                ${
+                                  task?.taskStatus?.[0]?.value ===
+                                  TaskStatus.DONE
+                                    ? styles.disabled
+                                    : null
+                                }`}
+                                onClick={() => {
+                                  setSelectedTask(task);
+                                }}
+                              >
+                                {task?.taskName}
+                              </p>
                             ) : task?.isEnd ? (
                               <div className={styles.endFlow}>End</div>
                             ) : (

@@ -19,6 +19,7 @@ const TaskBuilderContainer = () => {
   const [addType, setAddType] = useState<string>("");
   const [flow, setFlow] = useState<any>([[nullTask]]);
   const [tasks, setTasks] = useState<any[]>([]);
+  const [selectedTasks, setSelectedTasks] = useState<any[]>([]);
   const [currParent, setCurrParent] = useState<number | null>(null);
   const [taskCoords, setTaskCoords] = useState<any>(null);
   const [widths, setWidths] = useState<any>(null);
@@ -148,9 +149,9 @@ const TaskBuilderContainer = () => {
           newFlow?.push([{ ...nullTask, parent: [task?.id] }]);
         }
       }
-      console.log(newFlow);
       setFlow(newFlow);
     }
+    setSelectedTasks([...selectedTasks, task]);
     setAddType("");
   };
 
@@ -308,6 +309,7 @@ const TaskBuilderContainer = () => {
             <TaskSelector
               tasks={tasks}
               setTasks={setTasks}
+              selectedTasks={selectedTasks}
               currParent={currParent}
               coords={taskCoords}
               handleTaskAddToFlow={handleTaskAddToFlow}

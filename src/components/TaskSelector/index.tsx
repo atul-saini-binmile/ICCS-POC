@@ -4,8 +4,16 @@ import TaskInputForm from "../TaskInputForm";
 import styles from "./index.module.scss";
 
 const TaskSelector = (props: any) => {
-  const { tasks, setTasks, currParent, handleTaskAddToFlow, coords } = props;
+  const {
+    tasks,
+    setTasks,
+    selectedTasks,
+    currParent,
+    handleTaskAddToFlow,
+    coords,
+  } = props;
   const [show, setShow] = useState(false);
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Tasks List</h3>
@@ -13,15 +21,20 @@ const TaskSelector = (props: any) => {
         + Create New Task
       </div>
       <div className={styles.wrapper}>
-        {tasks.map((task: any) => (
-          <div
-            className={styles.taskWrapper}
-            key={task?.id}
-            onClick={() => handleTaskAddToFlow(currParent, task, coords)}
-          >
-            {task?.taskName}
-          </div>
-        ))}
+        {tasks.map((task: any) => {
+          if (selectedTasks?.find((i: any) => i?.id === task?.id)) {
+            return <></>;
+          }
+          return (
+            <div
+              className={styles.taskWrapper}
+              key={task?.id}
+              onClick={() => handleTaskAddToFlow(currParent, task, coords)}
+            >
+              {task?.taskName}
+            </div>
+          );
+        })}
       </div>
       <CustomModal
         show={show}
