@@ -35,7 +35,6 @@ const FlowTask = (props: any) => {
     setValue("taskStatus", task?.taskStatus);
     setValue("approval", task?.isApproved ?? false);
 
-    console.log(task);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task]);
 

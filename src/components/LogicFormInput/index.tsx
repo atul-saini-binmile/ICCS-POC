@@ -16,7 +16,6 @@ const LogicFormInput = (props: any) => {
 
   const onSubmit = (data: any) => {
     handleAddLogic(parseInt(data?.cols?.[0]?.value));
-    console.log(data?.cols?.[0]?.value);
   };
 
   return (
