@@ -54,7 +54,8 @@
               border: 1px solid #333;
               cursor: pointer;
 
-              &:hover {
+              &:hover,
+              &.active {
                 border-color: #150df7;
                 color: #150df7;
               }
@@ -80,24 +81,6 @@
 
       button {
         width: fit-content;
-      }
-    }
-
-    .addToForm {
-      max-width: fit-content;
-      margin: 0 auto;
-      padding: 4px 10px;
-      border: 1px solid #150df7;
-      border-radius: 999px;
-      cursor: pointer;
-
-      .add {
-        color: #150df7;
-      }
-
-      &.disabled {
-        pointer-events: none;
-        opacity: 0.6;
       }
     }
   }

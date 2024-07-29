@@ -15,16 +15,29 @@ import {
 } from "../../utils/constants";
 import localforage from "localforage";
 import { StorageKeys } from "../../utils/enum";
+import { useEffect } from "react";
 
 const TaskInputForm = (props: any) => {
-  const { tasks, setTasks, setShow } = props;
+  const { tasks, setTasks, setShow, prevValues } = props;
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
   });
+
+  useEffect(() => {
+    setValue("taskName", prevValues?.taskName);
+    setValue("description", prevValues?.description);
+    setValue("timeline", prevValues?.timeline);
+    setValue("department", prevValues?.department);
+    setValue("assignee", prevValues?.assignee);
+    setValue("taskStatus", prevValues?.taskStatus);
+    setValue("approval", prevValues?.approval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prevValues]);
 
   const onSubmit = async (data: any) => {
     const newTasks = [
@@ -55,8 +68,12 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange } }) => (
-              <TextInput onChange={onChange} placeholder="Enter Task Name" />
+            render={({ field: { onChange, value = "" } }) => (
+              <TextInput
+                onChange={onChange}
+                placeholder="Enter Task Name"
+                prevValue={value}
+              />
             )}
           />
           {errors?.taskName?.message && (
@@ -70,10 +87,11 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value = "" } }) => (
               <MultiLineInput
                 onChange={onChange}
                 placeholder="Enter Task Description"
+                prevValue={value}
               />
             )}
           />
@@ -88,10 +106,11 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value = "" } }) => (
               <NumberInput
                 placeholder="Enter time required in hours"
                 onChange={onChange}
+                prevValue={value}
               />
             )}
           />
@@ -106,11 +125,12 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <DropdownInput
                 placeholder="Select Department"
                 options={departmentOptions}
                 handleChange={onChange}
+                prevValue={value}
               />
             )}
           />
@@ -122,11 +142,12 @@ const TaskInputForm = (props: any) => {
           <Controller
             control={control}
             name="assignee"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <DropdownInput
                 options={assigneeOptions}
                 placeholder="Select Assignee"
                 handleChange={onChange}
+                prevValue={value}
               />
             )}
           />
@@ -135,11 +156,12 @@ const TaskInputForm = (props: any) => {
           <Controller
             control={control}
             name="taskStatus"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <DropdownInput
                 options={taskStatusOptions}
                 placeholder="Task Status"
                 handleChange={onChange}
+                prevValue={value}
               />
             )}
           />
@@ -148,10 +170,11 @@ const TaskInputForm = (props: any) => {
           <Controller
             control={control}
             name="approval"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <CheckboxInput
                 placeholder="is approval required"
                 handleChange={onChange}
+                prevValue={value}
               />
             )}
           />

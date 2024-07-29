@@ -74,10 +74,9 @@ export const departmentOptions = [
 ];
 
 export const taskStatusOptions = [
-  { id: 1, value: TaskStatus.COMPLETED, label: TaskStatus.COMPLETED_VAL },
   { id: 2, value: TaskStatus.IN_PROGRESS, label: TaskStatus.IN_PROGRESS_VAL },
-  { id: 3, value: TaskStatus.REJECTED, label: TaskStatus.REJECTED_VAL },
-  { id: 4, value: TaskStatus.STALE, label: TaskStatus.STALE_VAL },
+  { id: 1, value: TaskStatus.DONE, label: TaskStatus.DONE_VAL },
+  { id: 4, value: TaskStatus.PENDING, label: TaskStatus.PENDING_VAL },
 ];
 
 export const assigneeOptions = [

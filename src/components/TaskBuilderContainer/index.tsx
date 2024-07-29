@@ -2,69 +2,35 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { IFormBuildStorageItem } from "../../utils/interface";
 import localforage from "localforage";
-import { FlowFieldType, StorageKeys } from "../../utils/enum";
+import { FlowFieldType, StorageKeys, TextInputType } from "../../utils/enum";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Routes/RouteConstants";
-import { CustomButton } from "../BaseInputs";
+import { CustomButton, TextInput } from "../BaseInputs";
 import CustomModal from "../CustomModal";
 import LogicFormInput from "../LogicFormInput";
 import TaskSelector from "../TaskSelector";
 import { nullTask } from "../../utils/constants";
-
-const getTaskWidths = (tasks: any) => {
-  const widths: any = {};
-  tasks?.forEach((level: any, levelIndex: number) => {
-    level?.forEach((task: any, taskIndex: number) => {
-      if (task?.parent?.length > 0 && task?.parent?.[0]) {
-        const parentIndex = tasks?.[levelIndex - 1]?.findIndex(
-          (p: any) => p?.id === task?.parent?.[0]
-        );
-        const levelLength = level?.filter(
-          (i: any) => i?.parent?.[0] === task?.parent?.[0]
-        )?.length;
-        const currTaskWidth =
-          widths[`${levelIndex - 1}-${parentIndex}-${task?.parent?.[0]}`]
-            ?.width / levelLength;
-        // const marginLeft = task?.parent?.reduce((accm: number, i: number) => {
-        //   const currParent =
-        //     document?.getElementById(`level-task-${i}`)?.offsetLeft ?? 1700;
-        //   return Math.min(currParent, accm);
-        // }, 1700);
-        widths[`${levelIndex}-${taskIndex}-${task?.id}`] = {
-          width: currTaskWidth,
-          marginLeft: 0,
-        };
-      } else {
-        widths[`${levelIndex}-${taskIndex}-${task?.id}`] = { width: 100 };
-      }
-    });
-  });
-  console.log(widths);
-
-  return widths;
-};
+import { getTaskWidths } from "../../utils/helpers";
 
 const TaskBuilderContainer = () => {
   const [selectedForm, setSelectedForm] =
     useState<IFormBuildStorageItem | null>(null);
   const [show, setShow] = useState(false);
   const [addType, setAddType] = useState<string>("");
-  const [flow, setFlow] = useState<any>(null);
+  const [flow, setFlow] = useState<any>([[nullTask]]);
   const [tasks, setTasks] = useState<any[]>([]);
   const [currParent, setCurrParent] = useState<number | null>(null);
   const [taskCoords, setTaskCoords] = useState<any>(null);
   const [widths, setWidths] = useState<any>(null);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [formTitle, setFormTitle] = useState<string>("");
+  const [showTitle, setShowTitle] = useState(false);
   const navigate = useNavigate();
 
   const getStoredTasks = async () => {
     const storedTasks: any[] =
       (await localforage.getItem(StorageKeys.TASKS)) ?? [];
-    const storedFlow: any[] = (await localforage.getItem(
-      StorageKeys.FLOWS
-    )) ?? [[nullTask]];
     setTasks(storedTasks);
-    setFlow(storedFlow);
   };
 
   useEffect(() => {
@@ -100,6 +66,32 @@ const TaskBuilderContainer = () => {
     setTaskCoords({ levelIndex, taskIndex });
   };
 
+  const handleApprovalTask = (newFlow: any, task: any) => {
+    const { levelIndex, taskIndex } = taskCoords;
+    const arrToBeInserted: any[] = [];
+    for (let i = 0; i < 2; i++) {
+      arrToBeInserted?.push({
+        ...nullTask,
+        parent: [task?.id ?? null],
+      });
+    }
+    if (newFlow?.[levelIndex + 1]?.length > 0) {
+      const numberOfElementsWithSameCurrParent = newFlow[
+        levelIndex + 1
+      ]?.filter(
+        (i: any) => i?.parent?.[0] === currParent || i?.parent === currParent
+      )?.length;
+      newFlow[levelIndex + 1].splice(
+        taskIndex,
+        numberOfElementsWithSameCurrParent,
+        ...arrToBeInserted
+      );
+    } else {
+      newFlow[levelIndex + 1] = [...arrToBeInserted];
+    }
+    return newFlow;
+  };
+
   const handleTaskAddToFlow = (
     parentId: number | null,
     task: any,
@@ -109,7 +101,11 @@ const TaskBuilderContainer = () => {
       const newFlow = [
         [{ ...task, isTask: true, parent: parentId, children: [] }],
       ];
-      newFlow?.push([{ ...nullTask, parent: [task?.id] }]);
+      if (task?.approval) {
+        handleApprovalTask(newFlow, task);
+      } else {
+        newFlow?.push([{ ...nullTask, parent: [task?.id ?? null] }]);
+      }
       setFlow(newFlow);
     } else {
       const newFlow = [...flow];
@@ -122,23 +118,37 @@ const TaskBuilderContainer = () => {
       const parentIndex =
         newFlow?.[coords?.levelIndex - 1]?.findIndex(
           (p: any) => p?.id === currParent
-        ) || -1;
+        ) ?? -1;
+
       parentIndex !== -1 &&
         newFlow[coords?.levelIndex - 1][parentIndex].children?.push(task?.id);
       if (newFlow?.length > coords?.levelIndex + 1) {
         if (newFlow[coords?.levelIndex + 1]?.length > 0) {
-          newFlow[coords?.levelIndex + 1]?.push({
-            ...nullTask,
-            parent: [task?.id],
-          });
+          if (task?.approval) {
+            handleApprovalTask(newFlow, task);
+          } else {
+            newFlow[coords?.levelIndex + 1]?.push({
+              ...nullTask,
+              parent: [task?.id],
+            });
+          }
         } else {
-          newFlow[coords?.levelIndex + 1] = [
-            { ...nullTask, parent: [task?.id] },
-          ];
+          if (task?.approval) {
+            handleApprovalTask(newFlow, task);
+          } else {
+            newFlow[coords?.levelIndex + 1] = [
+              { ...nullTask, parent: [task?.id] },
+            ];
+          }
         }
       } else {
-        newFlow?.push([{ ...nullTask, parent: [task?.id] }]);
+        if (task?.approval) {
+          handleApprovalTask(newFlow, task);
+        } else {
+          newFlow?.push([{ ...nullTask, parent: [task?.id] }]);
+        }
       }
+      console.log(newFlow);
       setFlow(newFlow);
     }
     setAddType("");
@@ -146,6 +156,16 @@ const TaskBuilderContainer = () => {
 
   const handleFlowSelectedTask = (task: any) => {
     setSelectedTask(task);
+  };
+
+  const handleEndFlow = () => {
+    const { levelIndex, taskIndex } = taskCoords;
+    const newFlow = [...flow];
+    newFlow[levelIndex][taskIndex] = {
+      ...newFlow[levelIndex][taskIndex],
+      isEnd: true,
+      isTask: false,
+    };
   };
 
   const handleAddLogic = (num: number) => {
@@ -168,6 +188,54 @@ const TaskBuilderContainer = () => {
     );
     setFlow(newFlow);
     setAddType("");
+  };
+
+  const handleSaveFlow = () => {
+    setShowTitle(true);
+  };
+
+  const handleFormSave = async () => {
+    const existingFlows: any[] =
+      (await localforage.getItem(StorageKeys.FLOWS)) ?? [];
+    if (existingFlows?.find((i) => i?.title === formTitle)) {
+      window.alert("This title is already in use!");
+      return;
+    }
+    const currFlow = flow
+      ?.map((level: any[]) => {
+        return level?.map((task) => {
+          if (!task?.isTask && !task?.isEnd) {
+            return {
+              ...task,
+              isEnd: true,
+            };
+          }
+          return task;
+        });
+      })
+      ?.filter((i: any[]) => i?.length > 0);
+    const newFlows =
+      existingFlows?.length > 0
+        ? [
+            ...existingFlows,
+            {
+              flow: currFlow,
+              title: formTitle,
+              id: existingFlows?.length + 1,
+              selectedForm: selectedForm?.title,
+            },
+          ]
+        : [
+            {
+              flow: currFlow,
+              title: formTitle,
+              id: 1,
+              selectedForm: selectedForm?.title,
+            },
+          ];
+    await localforage.setItem(StorageKeys.FLOWS, newFlows);
+    setShowTitle(false);
+    navigate(ROUTES.SELECT_FLOW);
   };
 
   return (
@@ -202,6 +270,8 @@ const TaskBuilderContainer = () => {
                               >
                                 {task?.taskName}
                               </p>
+                            ) : task?.isEnd ? (
+                              <div className={styles.endFlow}>End</div>
                             ) : (
                               <div
                                 className={styles.addToForm}
@@ -226,6 +296,9 @@ const TaskBuilderContainer = () => {
                 <></>
               )}
             </div>
+          </div>
+          <div className={styles.saveContainer}>
+            <CustomButton onClick={handleSaveFlow}>Save Flow</CustomButton>
           </div>
         </div>
         <div className={styles.taskInputs}>
@@ -274,6 +347,34 @@ const TaskBuilderContainer = () => {
               }}
             >
               + Add Logic
+            </CustomButton>
+            <CustomButton
+              disabled={!flow?.[0]?.[0]?.isTask}
+              onClick={() => {
+                handleEndFlow();
+                setShow(false);
+              }}
+            >
+              End Flow
+            </CustomButton>
+          </div>
+        </div>
+      </CustomModal>
+      <CustomModal
+        show={showTitle}
+        onHide={() => setShowTitle(false)}
+        title="Form Title"
+      >
+        <div className={styles.modalContainer}>
+          <TextInput
+            placeholder="Enter Form Title"
+            onChange={(val) => setFormTitle(val)}
+            prevValue={formTitle}
+            type={TextInputType.ALPHA_NUMERIC}
+          />
+          <div className={styles.modalButton}>
+            <CustomButton onClick={handleFormSave} disabled={!formTitle}>
+              Save
             </CustomButton>
           </div>
         </div>

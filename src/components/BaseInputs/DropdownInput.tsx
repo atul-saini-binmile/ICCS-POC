@@ -34,10 +34,13 @@ const Dropdown: React.FC<IDropdownProps> = ({
   showFilter = false,
   filterPlaceholder = "",
   placeholder = "",
+  prevValue = [],
   handleChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<IOption[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<IOption[]>(
+    prevValue || []
+  );
   const [filter, setFilter] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<IOption[]>(options);
 

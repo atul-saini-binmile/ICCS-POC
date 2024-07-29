@@ -11,6 +11,7 @@ export interface INumberInput {
   minLen?: number | null;
   onChange?: (val: string | number) => void;
   placeholder?: string;
+  prevValue?: number | string;
 }
 
 export interface IOption {
@@ -26,6 +27,7 @@ export interface IDropdownProps {
   placeholder?: string;
   filterPlaceholder?: string;
   handleChange?: (options: IOption[]) => void;
+  prevValue?: IOption[];
 }
 
 export interface ISelectedOption {
@@ -37,6 +39,7 @@ export interface IMultiLineInput {
   onChange?: (val: string) => void;
   placeholder?: string;
   maxRows?: number;
+  prevValue?: string;
 }
 
 export interface ICustomButtonProps {
@@ -49,6 +52,7 @@ export interface ICustomButtonProps {
 export interface ICheckboxInput {
   placeholder: string;
   handleChange?: (val: boolean) => void;
+  prevValue?: boolean;
 }
 
 export interface IDropdownOption {

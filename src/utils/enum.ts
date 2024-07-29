@@ -30,20 +30,21 @@ export enum StorageKeys {
   SELECTED_FORM = "selectedForm",
   TASKS = "tasks",
   FLOWS = "flow",
+  SELECTED_FLOW = "selectedFlow",
+  ONGOING_FLOW = "ongoingFlow",
 }
 
 export enum FlowFieldType {
   TASK = "Task",
   LOGIC = "Logic",
+  END = "End",
 }
 
 export enum TaskStatus {
-  COMPLETED = "completed",
-  REJECTED = "rejected",
+  DONE = "done",
+  PENDING = "pending",
+  DONE_VAL = "Done",
+  PENDING_VAL = "Pending",
   IN_PROGRESS = "in-progress",
-  STALE = "stale",
-  COMPLETED_VAL = "Completed",
-  REJECTED_VAL = "Rejected",
   IN_PROGRESS_VAL = "In Progress",
-  STALE_VAL = "Stale",
 }

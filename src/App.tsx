@@ -6,6 +6,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ROUTES } from "./Routes/RouteConstants";
 import TaskBuilder from "./pages/TaskBuilder";
+import FlowSelector from "./pages/FlowSelector";
+import FlowExecutor from "./pages/FlowExecutor";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path={ROUTES.FORM_BUILDER} element={<FormBuilder />} />
           <Route path={ROUTES.FLOW_BUILDER} element={<FlowBuilder />} />
           <Route path={ROUTES.TASK_BUILDER} element={<TaskBuilder />} />
+          <Route path={ROUTES.SELECT_FLOW} element={<FlowSelector />} />
+          <Route path={ROUTES.EXECUTE_FLOW} element={<FlowExecutor />} />
         </Routes>
       </BrowserRouter>
     </div>

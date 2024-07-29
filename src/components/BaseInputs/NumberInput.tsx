@@ -3,8 +3,8 @@ import styles from "./index.module.scss";
 import { INumberInput } from "../../utils/interface";
 
 const NumberInput = (props: INumberInput) => {
-  const { maxLen = null, onChange, placeholder = "" } = props;
-  const [value, setValue] = useState<number | string>();
+  const { maxLen = null, onChange, placeholder = "", prevValue = "" } = props;
+  const [value, setValue] = useState<number | string>(prevValue);
 
   const handleChange = (val: string) => {
     if (val === "") {

@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { ICheckboxInput } from "../../utils/interface";
 
 const CheckboxInput: React.FC<ICheckboxInput> = (props) => {
-  const { placeholder, handleChange } = props;
-  const [checked, setChecked] = useState(false);
+  const { placeholder, handleChange, prevValue = false } = props;
+  const [checked, setChecked] = useState(prevValue);
+
+  useEffect(() => {
+    setChecked(prevValue);
+  }, [prevValue]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
@@ -16,14 +20,14 @@ const CheckboxInput: React.FC<ICheckboxInput> = (props) => {
       <input
         type="checkbox"
         className={`form-check-input ${styles.checkboxInput}`}
-        id="acceptTerms"
+        id={placeholder}
         checked={checked}
         onChange={handleCheckboxChange}
         autoComplete="off"
       />
       <label
         className={`form-check-label ${styles.checkboxLabel}`}
-        htmlFor="acceptTerms"
+        htmlFor={placeholder}
       >
         {placeholder}
       </label>

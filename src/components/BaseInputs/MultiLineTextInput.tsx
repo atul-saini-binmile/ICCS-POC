@@ -3,8 +3,8 @@ import styles from "./index.module.scss";
 import { IMultiLineInput } from "../../utils/interface";
 
 const MultiLineInput: React.FC<IMultiLineInput> = (props: IMultiLineInput) => {
-  const { onChange, placeholder = "", maxRows } = props;
-  const [value, setValue] = useState("");
+  const { onChange, placeholder = "", maxRows, prevValue = "" } = props;
+  const [value, setValue] = useState(prevValue);
 
   const handleChange = (val: string) => {
     setValue(val);
