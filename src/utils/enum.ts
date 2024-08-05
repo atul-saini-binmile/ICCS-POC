@@ -32,6 +32,7 @@ export enum StorageKeys {
   FLOWS = "flow",
   SELECTED_FLOW = "selectedFlow",
   ONGOING_FLOW = "ongoingFlow",
+  TEST_FLOW = "testFlow",
 }
 
 export enum FlowFieldType {

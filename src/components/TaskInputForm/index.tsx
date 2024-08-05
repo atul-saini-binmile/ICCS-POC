@@ -36,7 +36,6 @@ const TaskInputForm = (props: any) => {
       setValue("taskStatus", prevValues?.taskStatus);
       setValue("approval", prevValues?.approval);
     }
-    console.log(prevValues, "11111");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prevValues]);
 

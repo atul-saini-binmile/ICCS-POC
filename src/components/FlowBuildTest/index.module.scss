@@ -37,11 +37,21 @@
     width: 30%;
     padding: 20px;
 
+    button {
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 50px;
+    }
+
     .create {
       width: 100%;
       padding: 40px 50px;
       color: #150df7;
       cursor: pointer;
+    }
+
+    h3 {
+      text-align: center;
     }
   }
 

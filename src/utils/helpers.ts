@@ -28,3 +28,53 @@ export const getTaskWidths = (tasks: any) => {
   });
   return widths;
 };
+
+const nodeWidth = 160;
+const nodeHeight = 40;
+const verticalSpacing = 100;
+
+export const calculateNodePositions = (nodes: any[]) => {
+  const positions: any = {};
+
+  const calculatePosition = (
+    nodeId: string | number,
+    depth: number,
+    xOffset: any
+  ) => {
+    const node = nodes.find((node: { id: any }) => node.id === nodeId);
+    if (!node) return xOffset;
+
+    const children = nodes.filter(
+      (child: { parent: any }) => child.parent === nodeId
+    );
+    const xPosition = xOffset;
+
+    positions[nodeId] = {
+      x: xPosition * nodeWidth + 50 || 250,
+      y: depth * (nodeHeight + verticalSpacing),
+    };
+
+    let nextXOffset = xOffset;
+
+    children.forEach((child: { id: any }) => {
+      nextXOffset = calculatePosition(child.id, depth + 1, nextXOffset);
+    });
+
+    if (children.length > 0) {
+      const firstChildPosition: any = positions[children[0].id].x;
+      const lastChildPosition: any =
+        positions[children[children.length - 1].id].x;
+      positions[nodeId].x = (firstChildPosition + lastChildPosition) / 2;
+    }
+
+    return nextXOffset + 1;
+  };
+
+  nodes
+    .filter((node: { parent: any }) => !node.parent)
+    .forEach((rootNode: { id: any }, index: any) => {
+      calculatePosition(rootNode.id, 0, index);
+    });
+
+  return positions;
+};
