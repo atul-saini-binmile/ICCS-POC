@@ -6,6 +6,7 @@ import {
   ReactFlow,
   BackgroundVariant,
   ConnectionLineType,
+  ReactFlowProvider,
 } from "@xyflow/react";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./index.module.scss";
@@ -14,11 +15,12 @@ import CustomModal from "../CustomModal";
 import TaskInputForm from "../TaskInputForm";
 import localforage from "localforage";
 import { StorageKeys } from "../../utils/enum";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { calculateNodePositions } from "../../utils/helpers";
 import { CustomButton } from "../BaseInputs";
 
 const FlowBuildTest = () => {
+  const [viewPosition, setViewPosition] = useState({ x: 0, y: 0, zoom: 1 });
   const [nodes, setNodes, onNodesChange] = useNodesState<any>([]);
   const [storedData, setStoredData] = useState<any[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
@@ -89,8 +91,8 @@ const FlowBuildTest = () => {
           props: { ...data, id: `${nds?.length + 1}` },
         },
         position: {
-          x: 0,
-          y: 0,
+          x: viewPosition.x,
+          y: viewPosition.y,
         },
       });
     });
@@ -102,7 +104,6 @@ const FlowBuildTest = () => {
       nds.map((node: { id: any; data: any }, index: number) => {
         if (node.id === data?.id) {
           updatedData[index] = data;
-          console.log(updatedData);
           setStoredData(updatedData);
           return {
             ...node,
@@ -122,20 +123,34 @@ const FlowBuildTest = () => {
     setSelectedTask(null);
   };
 
+  const onMove = (
+    _event: any,
+    viewport: { x: number; y: number; zoom: number }
+  ) => {
+    setViewPosition({
+      x: -1 * viewport.x,
+      y: -1 * viewport.y,
+      zoom: viewport.zoom,
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.canvas}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          zoomOnScroll={false}
-          onNodeClick={onNodeClick}
-        >
-          <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-        </ReactFlow>
+        <ReactFlowProvider>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            zoomOnScroll={false}
+            onNodeClick={onNodeClick}
+            onMove={onMove}
+          >
+            <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+          </ReactFlow>
+        </ReactFlowProvider>
       </div>
       <div className={styles.taskInputs}>
         <CustomButton
@@ -167,7 +182,6 @@ const FlowBuildTest = () => {
             />
           )}
         </div>
-        <Link to="/">Lets go</Link>
       </div>
       <CustomModal
         show={show}
