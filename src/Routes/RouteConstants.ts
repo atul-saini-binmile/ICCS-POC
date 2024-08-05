@@ -5,4 +5,5 @@ export enum ROUTES {
   TASK_BUILDER = "/task-builder",
   SELECT_FLOW = "/flow-select",
   EXECUTE_FLOW = "/flow-execute",
+  FLOW_BUILDER_TEST = "/flow-builder-test",
 }

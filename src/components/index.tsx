@@ -5,3 +5,5 @@ export { default as TaskBuilderContainer } from "./TaskBuilderContainer";
 export { default as LogicFormInput } from "./LogicFormInput";
 export { default as TaskInputForm } from "./TaskInputForm";
 export { default as FlowExecute } from "./FlowExecute";
+export { default as FlowBuildTest } from "./FlowBuildTest";
+export * from "./BaseInputs";

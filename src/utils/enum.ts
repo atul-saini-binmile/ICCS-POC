@@ -48,3 +48,9 @@ export enum TaskStatus {
   IN_PROGRESS = "in-progress",
   IN_PROGRESS_VAL = "In Progress",
 }
+
+export enum BackgroundVariant {
+  Dots = "dots",
+  Cross = "Cross",
+  Lines = "lines",
+}

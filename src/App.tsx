@@ -8,6 +8,7 @@ import { ROUTES } from "./Routes/RouteConstants";
 import TaskBuilder from "./pages/TaskBuilder";
 import FlowSelector from "./pages/FlowSelector";
 import FlowExecutor from "./pages/FlowExecutor";
+import FlowBuilderTest from "./pages/FlowBuilderTest";
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
           <Route path={ROUTES.TASK_BUILDER} element={<TaskBuilder />} />
           <Route path={ROUTES.SELECT_FLOW} element={<FlowSelector />} />
           <Route path={ROUTES.EXECUTE_FLOW} element={<FlowExecutor />} />
+          <Route
+            path={ROUTES.FLOW_BUILDER_TEST}
+            element={<FlowBuilderTest />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

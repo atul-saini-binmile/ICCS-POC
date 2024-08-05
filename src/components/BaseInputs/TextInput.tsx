@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { ITextInput } from "../../utils/interface";
 import { TextInputType } from "../../utils/enum";
@@ -14,6 +14,10 @@ function TextInput(props: ITextInput) {
 
   const [value, setValue] = useState(prevValue);
 
+  useEffect(() => {
+    setValue(prevValue);
+  }, [prevValue]);
+
   const handleChange = (val: string) => {
     let regex = /^[\s\S]*$/;
     switch (type) {
@@ -24,7 +28,7 @@ function TextInput(props: ITextInput) {
         regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         break;
       case TextInputType.ALPHA_NUMERIC:
-        regex = /^[a-zA-Z0-9]*$/;
+        regex = /^[a-zA-Z0-9 ]*$/;
         break;
       default:
         regex = /^[\s\S]*$/;

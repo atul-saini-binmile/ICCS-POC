@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { INumberInput } from "../../utils/interface";
 
 const NumberInput = (props: INumberInput) => {
   const { maxLen = null, onChange, placeholder = "", prevValue = "" } = props;
   const [value, setValue] = useState<number | string>(prevValue);
+
+  useEffect(() => {
+    setValue(prevValue);
+  }, [prevValue]);
 
   const handleChange = (val: string) => {
     if (val === "") {

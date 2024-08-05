@@ -41,8 +41,8 @@ const TaskSelector = (props: any) => {
         onHide={() => setShow(false)}
         title="Create New Task"
       >
-        <div className={styles.modalContainer}>
-          <div className={styles.modalButton}>
+        <div>
+          <div>
             <TaskInputForm
               tasks={tasks}
               setTasks={setTasks}

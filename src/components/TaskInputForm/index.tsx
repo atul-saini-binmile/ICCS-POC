@@ -13,12 +13,10 @@ import {
   departmentOptions,
   taskStatusOptions,
 } from "../../utils/constants";
-import localforage from "localforage";
-import { StorageKeys } from "../../utils/enum";
 import { useEffect } from "react";
 
 const TaskInputForm = (props: any) => {
-  const { tasks, setTasks, setShow, prevValues } = props;
+  const { setShow, onAddNode, prevValues, onUpdateNode } = props;
   const {
     control,
     handleSubmit,
@@ -29,50 +27,58 @@ const TaskInputForm = (props: any) => {
   });
 
   useEffect(() => {
-    setValue("taskName", prevValues?.taskName);
-    setValue("description", prevValues?.description);
-    setValue("timeline", prevValues?.timeline);
-    setValue("department", prevValues?.department);
-    setValue("assignee", prevValues?.assignee);
-    setValue("taskStatus", prevValues?.taskStatus);
-    setValue("approval", prevValues?.approval);
+    if (prevValues) {
+      setValue("taskName", prevValues?.taskName);
+      setValue("description", prevValues?.description);
+      setValue("timeline", prevValues?.timeline);
+      setValue("department", prevValues?.department);
+      setValue("assignee", prevValues?.assignee);
+      setValue("taskStatus", prevValues?.taskStatus);
+      setValue("approval", prevValues?.approval);
+    }
+    console.log(prevValues, "11111");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prevValues]);
 
   const onSubmit = async (data: any) => {
-    const newTasks = [
-      ...tasks,
-      {
-        id: tasks?.length + 1,
-        taskName: data?.taskName,
-        description: data?.description,
-        timeline: data?.timeline,
-        department: data?.department,
-        assignee: data?.assignee ?? null,
-        taskStatus: data?.taskStatus ?? null,
-        approval: !!data?.approval,
-      },
-    ];
-    setTasks(newTasks);
-    await localforage.setItem(StorageKeys.TASKS, newTasks);
-    setShow(false);
+    prevValues
+      ? onUpdateNode({
+          ...prevValues,
+          taskName: data?.taskName,
+          description: data?.description,
+          timeline: data?.timeline,
+          department: data?.department,
+          assignee: data?.assignee ?? null,
+          taskStatus: data?.taskStatus ?? null,
+          approval: !!data?.approval,
+        })
+      : onAddNode({
+          taskName: data?.taskName,
+          description: data?.description,
+          timeline: data?.timeline,
+          department: data?.department,
+          assignee: data?.assignee ?? null,
+          taskStatus: data?.taskStatus ?? null,
+          approval: !!data?.approval,
+        });
+    setShow && setShow(false);
   };
 
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} key={prevValues?.toString()}>
           <Controller
             name="taskName"
             control={control}
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange, value = "" } }) => (
+            render={({ field: { onChange } }) => (
               <TextInput
                 onChange={onChange}
                 placeholder="Enter Task Name"
-                prevValue={value}
+                prevValue={prevValues?.taskName}
               />
             )}
           />
@@ -87,11 +93,11 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange, value = "" } }) => (
+            render={({ field: { onChange } }) => (
               <MultiLineInput
                 onChange={onChange}
                 placeholder="Enter Task Description"
-                prevValue={value}
+                prevValue={prevValues?.description}
               />
             )}
           />
@@ -106,11 +112,11 @@ const TaskInputForm = (props: any) => {
             rules={{
               required: "This field is required",
             }}
-            render={({ field: { onChange, value = "" } }) => (
+            render={({ field: { onChange } }) => (
               <NumberInput
                 placeholder="Enter time required in hours"
                 onChange={onChange}
-                prevValue={value}
+                prevValue={prevValues?.timeline}
               />
             )}
           />
@@ -130,7 +136,7 @@ const TaskInputForm = (props: any) => {
                 placeholder="Select Department"
                 options={departmentOptions}
                 handleChange={onChange}
-                prevValue={value}
+                prevValue={prevValues?.department}
               />
             )}
           />
@@ -147,7 +153,7 @@ const TaskInputForm = (props: any) => {
                 options={assigneeOptions}
                 placeholder="Select Assignee"
                 handleChange={onChange}
-                prevValue={value}
+                prevValue={prevValues?.assignee}
               />
             )}
           />
@@ -161,7 +167,7 @@ const TaskInputForm = (props: any) => {
                 options={taskStatusOptions}
                 placeholder="Task Status"
                 handleChange={onChange}
-                prevValue={value}
+                prevValue={prevValues?.taskStatus}
               />
             )}
           />
@@ -174,7 +180,7 @@ const TaskInputForm = (props: any) => {
               <CheckboxInput
                 placeholder="is approval required"
                 handleChange={onChange}
-                prevValue={value}
+                prevValue={prevValues?.approval}
               />
             )}
           />

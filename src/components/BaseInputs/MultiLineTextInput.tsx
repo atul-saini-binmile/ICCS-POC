@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { IMultiLineInput } from "../../utils/interface";
 
@@ -10,6 +10,10 @@ const MultiLineInput: React.FC<IMultiLineInput> = (props: IMultiLineInput) => {
     setValue(val);
     onChange && onChange(val);
   };
+
+  useEffect(() => {
+    setValue(prevValue);
+  }, [prevValue]);
 
   return (
     <div className={styles.container}>

@@ -46,6 +46,11 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setSelectedOptions(prevValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prevValue?.toString()]);
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleDropdownClose = () => {

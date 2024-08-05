@@ -100,9 +100,6 @@ const FlowExecute = () => {
       } else {
         const nextTask = children?.find((i) => i?.id === childrenIds[0]);
         newFlow?.push([nextTask]);
-        setTimeout(() => {
-          window.alert("Flow Completed!");
-        }, 1000);
       }
     }
     setFlow(newFlow);
