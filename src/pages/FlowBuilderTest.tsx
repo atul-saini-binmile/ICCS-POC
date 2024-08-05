@@ -2,7 +2,7 @@ import { FlowBuildTest } from "../components";
 
 const FlowBuilderTest = () => {
   return (
-    <div className="container">
+    <div>
       <FlowBuildTest />
     </div>
   );
